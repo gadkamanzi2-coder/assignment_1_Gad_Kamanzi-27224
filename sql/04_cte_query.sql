@@ -1,0 +1,2 @@
+-- Sunrise Supermarket Assignment One
+-- CTE query
