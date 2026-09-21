@@ -1,7 +1,7 @@
 # PL/SQL Assignment One - Sunrise Supermarket
 
 **Name:** Gad Kamanzi
-**Student ID:** 27224
+**Student ID:** 27234
 **DBMS:** Oracle Database 21c
 
 ## 1. Business Scenario
