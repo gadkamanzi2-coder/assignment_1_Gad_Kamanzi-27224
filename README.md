@@ -1,128 +1,160 @@
-# assignment_1_Gad_Kamanzi-27224
-PL/SQL Assignment One - Sunrise Supermarket
+# PL/SQL Assignment One - Sunrise Supermarket
 
-## JOIN Queries
+**Name:** Gad Kamanzi
+**Student ID:** 27224
+**DBMS:** Oracle Database 21c
 
-### JOIN Query 1: Orders with Customer Information
+## 1. Business Scenario
 
-**Objective:**  
-List every order together with the customer name, city, and order date.
+Sunrise Supermarket sells different products to customers. Customers can place orders containing different products.
 
-**SQL Query:**
+The purpose of this assignment is to use SQL to understand customer orders, products, spending, and sales trends.
 
-```sql
-SELECT
-    o.order_id,
-    c.customer_name,
-    c.city,
-    o.order_date
-FROM orders o
-INNER JOIN customers c
-    ON o.customer_id = c.customer_id
-ORDER BY o.order_date;
-This query uses an INNER JOIN to combine the orders and customers tables using customer_id. It displays the order ID, customer name,city, and order date. The results are arranged from the earliest order date to the latest.
-The query returned 15 orders, showing the customer information associated with each order.
+The database contains:
 
-This query helps Sunrise Supermarket identify which customers placed each order and the city where each customer is located. Management can use this information to understand customer ordering activity by location.
+* 6 customers
+* 10 products
+* 6 categories
+* 15 orders
+* 30 order items
+* Orders from different dates
 
-### JOIN Query 2: Order Items with Product Information
+## 2. Project Structure
 
-**Objective:**  
-List every order item with the product name, category, price, and quantity.
+```text
+assignment_1_Gad_Kamanzi-27224/
+├── README.md
+├── sql/
+│   ├── 01_create_tables.sql
+│   ├── 02_insert_data.sql
+│   ├── 03_join_queries.sql
+│   ├── 04_cte_query.sql
+│   └── 05_window_queries.sql
+└── screenshots/
+    ├── join_query_1.png
+    ├── join_query_2.png
+    ├── join_query_3.png
+    ├── cte_query.png
+    ├── window_function_1.png
+    ├── window_function_2.png
+    ├── window_function_3.png
+    └── window_function_4.png
+```
 
-**Explanation:**  
-This query uses an `INNER JOIN` to combine the `order_items` and `products` tables using `product_id`. It shows which products were included in each order, together with their category, price, and quantity purchased.
+## 3. How to Run
 
-**Result:**  
-The query returned **30 order items**, displaying the product information and quantity for each order item.
+1. Open Oracle Database 21c using SQL Developer.
+2. Run `01_create_tables.sql`.
+3. Run `02_insert_data.sql`.
+4. Run the JOIN, CTE, and window-function queries from the remaining SQL files.
+5. The SQL files contain the complete queries used in this assignment.
 
-**Business Interpretation:**  
-This query helps Sunrise Supermarket understand which products customers purchase and the quantities ordered. Management can use this information to monitor product sales and understand purchasing patterns.
+## 4. JOIN Queries
 
-### JOIN Query 3: All Customers and Their Orders
+### JOIN 1 — Orders and Customers
 
-**Objective:**  
-List all customers and their orders where they exist, including customers who have no orders.
+**Purpose:** Shows each order together with the customer's name, city, and order date.
 
-**Explanation:**  
-This query uses a `LEFT JOIN` to combine the `customers` and `orders` tables using `customer_id`. A `LEFT JOIN` ensures that every customer is displayed, even if that customer has not placed an order. Customers without orders will have `NULL` values for the order information.
+**Result:** 15 orders were returned.
 
-**Result:**  
-The query displayed all **6 customers** and their orders. Patrick Tuyisenge was also displayed even though he has no orders, with `NULL` values for the order ID and order date.
+**Business use:** Helps the supermarket see who placed each order and where the customers are located.
 
-**Business Interpretation:**  
-This query helps Sunrise Supermarket identify both active and inactive customers. Management can see which customers have placed orders and identify customers who have not yet made any purchases.
+**SQL:** `sql/03_join_queries.sql`
+**Screenshot:** `screenshots/join_query_1.png`
 
-## CTE Query
+### JOIN 2 — Order Items and Products
 
-### CTE Query 1: Customers Above Average Spending
+**Purpose:** Shows the products in each order together with their category, price, and quantity.
 
-**Objective:**  
-Calculate the total amount spent by each customer and return customers whose total spending is above the average customer spending.
+**Result:** 30 order items were returned.
 
-**Explanation:**  
-This query uses a Common Table Expression (CTE) named `customer_totals` to first calculate the total spending for each customer. The total is calculated by multiplying the quantity purchased by the product price and then adding the amounts for each customer. The main query compares each customer's total spending with the average spending of all customers and returns only customers who are above the average.
+**Business use:** Helps the supermarket see which products customers are buying and in what quantities.
 
-**Result:**  
-The query returned **4 customers** whose total spending was above the average customer spending.
+**SQL:** `sql/03_join_queries.sql`
+**Screenshot:** `screenshots/join_query_2.png`
 
-**Business Interpretation:**  
-This query helps Sunrise Supermarket identify customers who contribute a higher amount of sales revenue than the average customer. Management can use this information to understand high-value customer purchasing activity and develop appropriate customer retention strategies.
+### JOIN 3 — Customers and Their Orders
 
-## Window Functions
+**Purpose:** Shows all customers, including customers who have not placed an order.
 
-### Window Function 1: Rank Customers by Total Spending
+**Result:** 16 rows were returned. Patrick Tuyisenge appears with `NULL` order information because he has no orders.
 
-**Objective:**  
-Rank customers according to the total amount they have spent, with the highest spender ranked first.
+**Business use:** Helps identify both customers who are buying and customers who have not yet purchased anything.
 
-**Explanation:**  
-This query first calculates the total spending for each customer. It then uses the `RANK()` window function to assign a ranking based on total spending in descending order. The customer with the highest total spending receives rank 1.
+**SQL:** `sql/03_join_queries.sql`
+**Screenshot:** `screenshots/join_query_3.png`
 
-**Result:**  
-The query returned **5 customers with orders**, and each customer was assigned a spending rank based on their total amount spent. The customer with the highest spending received rank 1.
+## 5. CTE Query
 
-**Business Interpretation:**  
-This query helps Sunrise Supermarket identify customers according to their total spending. Management can use this information to understand customer value and monitor which customers generate higher sales revenue.
+### Customers Above Average Spending
 
-### Window Function 2: Number Each Customer's Orders
+**Purpose:** Calculates the total amount spent by each customer and finds customers whose spending is above the average.
 
-**Objective:**  
-Number each customer's orders according to the order in which they were placed.
+**Result:** 4 customers were above the average spending.
 
-**Explanation:**  
-This query uses the `ROW_NUMBER()` window function to assign a sequential number to each order for every customer. `PARTITION BY customer_id` separates the orders by customer, while `ORDER BY order_date` arranges each customer's orders from the earliest to the latest.
+**Business use:** Helps identify customers who contribute a higher amount of sales.
 
-### Window Function 3: Running Total of Revenue Over Time
+**SQL:** `sql/04_cte_query.sql`
+**Screenshot:** `screenshots/cte_query.png`
 
-**Objective:**  
-Show the running total of revenue over time, ordered by order date.
+## 6. Window Functions
 
-**Explanation:**  
-This query first calculates the revenue generated by each order by multiplying the quantity of each product by its price. It then uses the `SUM()` window function to calculate a running total of revenue. The orders are arranged by date so that the cumulative revenue can be tracked over time.
+### Window Function 1 — Customer Spending Rank
 
-**Result:**  
-The query returned **15 orders**, showing the revenue generated by each order and the running total revenue as the orders progressed by date.
+**Purpose:** Ranks customers according to their total spending.
 
-**Business Interpretation:**  
-This query helps Sunrise Supermarket monitor how total revenue accumulates over time. Management can use the running revenue figure to track sales performance and observe how each new order contributes to overall revenue.
+**Result:** 5 customers with orders were ranked. The highest spending in this dataset was 48,000.
 
-**Result:**  
-The query returned **15 orders**. Each customer's orders were numbered sequentially according to the date they were placed.
+**Business use:** Helps compare customer spending.
 
-**Business Interpretation:**  
-This query helps Sunrise Supermarket track the sequence of purchases made by each customer. Management can use this information to understand repeat purchasing behavior and the progression of customer orders over time.
+**SQL:** `sql/05_window_queries.sql`
+**Screenshot:** `screenshots/window_function_1.png`
 
-### Window Function 4: Days Between Customer Orders
+### Window Function 2 — Order Number
 
-**Objective:**  
-For customers with more than one order, show the number of days between their current order and their previous order.
+**Purpose:** Numbers each customer's orders from the first order to the latest order.
 
-**Explanation:**  
-This query uses the `LAG()` window function to retrieve the previous order date for each customer. `PARTITION BY customer_id` keeps each customer's orders separate, while `ORDER BY order_date` arranges the orders chronologically. The difference between the current order date and the previous order date gives the number of days between purchases.
+**Result:** 15 orders were numbered.
 
-**Result:**  
-The query returned **10 rows**, showing the previous order date and the number of days between consecutive orders for customers who placed multiple orders.
+**Business use:** Helps understand repeat purchases by each customer.
 
-**Business Interpretation:**  
-This query helps Sunrise Supermarket understand how frequently customers return to make purchases. Management can use this information to identify purchasing patterns and understand customer ordering frequency.
+**SQL:** `sql/05_window_queries.sql`
+**Screenshot:** `screenshots/window_function_2.png`
+
+### Window Function 3 — Running Revenue
+
+**Purpose:** Calculates the running total of revenue as orders are made over time.
+
+**Result:** 15 orders were included, with total revenue reaching 198,800.
+
+**Business use:** Helps track how revenue increases over time.
+
+**SQL:** `sql/05_window_queries.sql`
+**Screenshot:** `screenshots/window_function_3.png`
+
+### Window Function 4 — Days Between Orders
+
+**Purpose:** Finds the number of days between a customer's current order and previous order.
+
+**Result:** 10 rows were returned for customers who placed multiple orders.
+
+**Business use:** Helps understand how often customers return to make purchases.
+
+**SQL:** `sql/05_window_queries.sql`
+**Screenshot:** `screenshots/window_function_4.png`
+
+## 7. Challenges and Solutions
+
+**Running multiple SQL statements:**
+I initially used the normal run option for multiple statements. I learned to use **Run Script (F5)** when running a complete SQL script.
+
+**Understanding JOIN results:**
+The `LEFT JOIN` returned more rows than the number of customers because customers with multiple orders appeared more than once. This helped me understand how the relationship between customers and orders affects the result.
+
+**Calculating spending:**
+Customer spending required combining data from several tables. I used JOINs and a CTE to calculate the totals.
+
+## 8. Conclusion
+This assignment helped me practice SQL JOINs, CTEs, and window functions using a supermarket database. It also helped me understand how SQL can be used to get useful information from business data.
+
+This assignment helped me practice SQL JOINs, CTEs, and window functions using a supermarket database. It also helped me understand how SQL can be used to get useful information from business data.
