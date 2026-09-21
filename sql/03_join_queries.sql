@@ -1,0 +1,2 @@
+-- Sunrise Supermarket Assignment One
+-- JOIN queries
